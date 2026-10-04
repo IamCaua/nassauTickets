@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import Cabecalho from './components/Cabecalho.jsx';
 import Totem from './pages/Totem.jsx';
 import Painel from './pages/Painel.jsx';
-import { criarSenha } from './utils/senhas.js';
+import Atendente from './pages/Atendente.jsx';
+import { criarSenha, escolherProxima } from './utils/senhas.js';
 
 const TELAS_VALIDAS = ['totem', 'painel', 'atendente'];
 
@@ -34,18 +35,21 @@ export default function App() {
     setUltimaEmitida(senha);
   }
 
+  // O atendente chama a próxima senha; ela sai da fila e vai para o painel.
+  function chamarProxima(guiche) {
+    const proxima = escolherProxima(fila);
+    if (!proxima) return;
+    setFila(fila.filter((s) => s.numero !== proxima.numero));
+    setChamadas([{ ...proxima, guiche, chamadaEm: new Date().toISOString() }, ...chamadas]);
+  }
+
   return (
     <>
       <Cabecalho telaAtual={tela} />
       <main>
         {tela === 'totem' && <Totem ultimaEmitida={ultimaEmitida} totalNaFila={fila.length} onEmitir={emitirSenha} />}
         {tela === 'painel' && <Painel chamadas={chamadas} />}
-        {tela === 'atendente' && (
-          <section className="cartao">
-            <h1>{tela}</h1>
-            <p>Tela em construção.</p>
-          </section>
-        )}
+        {tela === 'atendente' && <Atendente fila={fila} chamadas={chamadas} onChamar={chamarProxima} />}
       </main>
       <footer className="rodape">Primeira fase · protótipo sem backend, os dados ficam só nesta página</footer>
     </>
