@@ -5,6 +5,18 @@ Sistema de controle de atendimento por senhas para um Laboratório de Análises 
 **Agentes:** AS (Agente Sistema), AA (Agente Atendente), AC (Agente Cliente, anônimo).
 **Perfis:** Atendente e Gestor (o gestor é o atendente com perfil adicional).
 
+## Escopo da primeira fase
+
+A primeira fase entrega um protótipo só de frontend (React, com os dados no estado local, sem backend nem banco de dados). Os requisitos abaixo descrevem o sistema completo; a tabela mostra o que a primeira fase cobre.
+
+| Requisito | Primeira fase |
+|-----------|---------------|
+| RF01 Emitir senha pelo totem | Implementado |
+| RF02 Numeração `YYMMDD-PPSQ` | Implementado no frontend, sem persistência (a sequência reinicia ao recarregar a página) |
+| RF03 Chamar próxima senha | Simplificado: ordem SP, SE, SG e, dentro de cada tipo, ordem de chegada (a regra completa RN02 fica para a segunda fase) |
+| RF08 Painel das últimas chamadas | Implementado (senha atual, guichê e histórico, sem áudio) |
+| RF04, RF05, RF06, RF07, RF09 a RF15 | Segunda fase |
+
 ## 1. Requisitos funcionais
 
 | ID | Requisito | Prioridade |
@@ -40,7 +52,7 @@ Sistema de controle de atendimento por senhas para um Laboratório de Análises 
 | RNF09 | LGPD | O cliente é anônimo: o sistema não coleta dados pessoais dele. Dados dos atendentes (nome, login) são usados só para a finalidade do sistema, com acesso restrito. |
 | RNF10 | Acessibilidade | Conformidade com a Lei Brasileira de Inclusão (Lei 13.146/2015) e WCAG 2.1 AA: contraste adequado, navegação por teclado, rótulos para leitores de tela, áudio como alternativa ao painel visual e fonte grande no totem. |
 | RNF11 | Usabilidade | O totem deve ser usável sem treinamento, com no máximo um toque para emitir a senha. |
-| RNF12 | Manutenibilidade | Frontend em React 19; backend em Node.js 22 com Express; MySQL 8.0. Código versionado em Git com branches `main` e `dev`. |
+| RNF12 | Manutenibilidade | Frontend em React 19. Backend e banco de dados serão definidos na segunda fase, entre as opções aceitas pelo laboratório (Node.js 22 com Express, Java 21 com Spring Boot ou Python 3.14 com Flask/FastAPI; MySQL 8.0). Código versionado em Git com branches `main` e `dev`. |
 
 ## 3. Regras de negócio
 
@@ -75,6 +87,8 @@ Sistema de controle de atendimento por senhas para um Laboratório de Análises 
 | UC10 | Encerrar expediente | Sistema / Gestor | 1. Às 17h, o sistema bloqueia novas emissões. 2. Atendimentos em curso terminam. 3. Senhas restantes são descartadas. | — |
 
 ## 5. Estratégia para falhas (recuperação de desastres)
+
+> Esta estratégia vale para o sistema completo (segunda fase). Na primeira fase não há backend nem banco.
 
 - **Frontend:** toda chamada à API trata falha de rede. Totem e terminal exibem mensagem clara; o painel mantém a última lista e mostra aviso, sem apagar as informações.
 - **Backend fora do ar:** o frontend continua tentando reconectar (a cada 2 s) e volta ao normal sozinho.

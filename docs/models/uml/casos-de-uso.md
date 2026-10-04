@@ -33,3 +33,5 @@ flowchart LR
     G -.->|também é| A
     S --- UC10
 ```
+
+**Primeira fase:** são cobertos UC01 (Emitir senha), UC02 (Chamar próxima senha, de forma simplificada) e UC07 (Acompanhar painel). Os demais casos de uso ficam para a segunda fase.

@@ -55,4 +55,4 @@ erDiagram
     }
 ```
 
-O esquema SQL correspondente está em `schema.sql` (MySQL 8.0). No protótipo atual, os dados ficam em memória; o banco entra na próxima fase.
+O esquema SQL correspondente está em `schema.sql` (MySQL 8.0). Na primeira fase não há banco de dados: as senhas ficam no estado do React, no frontend. O banco (MySQL) entra na segunda fase.
