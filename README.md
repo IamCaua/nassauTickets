@@ -4,11 +4,17 @@ Sistema de controle de atendimento por senhas para um Laboratório de Análises 
 
 ## Sobre o projeto
 
-O cliente retira a senha em um totem, acompanha a chamada em um painel e é atendido em qualquer guichê disponível. O atendente chama o próximo da fila, inicia e encerra o atendimento. O gestor acompanha os relatórios diários e mensais.
+O cliente retira a senha em um totem, acompanha a chamada em um painel e é atendido em qualquer guichê disponível. O atendente chama o próximo da fila. Na versão completa, o atendente também inicia e encerra o atendimento e o gestor acompanha relatórios diários e mensais.
 
 **Objetivo:** aplicar, em um projeto de equipe, desenvolvimento Web com React, organização de repositório, versionamento com Git/GitHub e documentação de requisitos.
 
-## Regras de atendimento
+## Estado atual: primeira fase
+
+Esta é a **primeira fase** do projeto: um protótipo só de frontend, com 3 telas ligadas pelo estado do React (Totem, Painel e Atendente). Não há backend nem banco de dados: as senhas ficam na memória da página e **são perdidas ao recarregá-la**. O sistema completo será construído na segunda fase.
+
+## Regras de atendimento (sistema completo)
+
+Estas regras vêm da especificação do laboratório. A primeira fase implementa só parte delas (veja Funcionalidades).
 
 | Item | Regra |
 |------|-------|
@@ -22,43 +28,63 @@ O cliente retira a senha em um totem, acompanha a chamada em um painel e é aten
 | Guichês | qualquer guichê atende qualquer tipo de senha |
 | Estados da senha | EMITIDA → AGUARDANDO → CHAMADA → CHAMADA_NOVAMENTE → EM_ATENDIMENTO → ATENDIDA (ou NÃO_COMPARECEU) |
 
-## Funcionalidades previstas
+## Funcionalidades
 
-- [ ] Emissão de senhas pelo totem (SP, SE e SG)
-- [ ] Fila com priorização e controle de concorrência entre atendentes
-- [ ] Painel de chamadas com as 5 últimas senhas
-- [ ] Chamada com áudio (prioridade, senha e guichê) e botão "Chamar Novamente" ("Última chamada")
-- [ ] Início e encerramento do atendimento pelo atendente
-- [ ] Máquina de estados das senhas
-- [ ] Login do atendente, com perfil adicional de gestor
-- [ ] Relatórios diário e mensal (quantitativos, detalhamento, tempo médio e auditoria)
-- [ ] Acompanhamento do desempenho dos atendimentos
-- [ ] Comportamento do frontend e do painel em caso de falha do backend ou do banco de dados
+### ✅ Implementadas na primeira fase
+
+- **Totem:** emissão de senha SP, SG ou SE, com numeração `YYMMDD-PPSQ` (sequência por tipo) e cartão com a senha emitida.
+- **Painel de chamadas:** senha chamada agora com o guichê e as últimas chamadas (5 no total); nunca mostra a próxima senha.
+- **Terminal do atendente:** escolha do guichê (1 a 3), fila de espera e botão "Chamar próxima".
+- **Integração entre as telas:** a senha emitida no Totem aparece na fila do Atendente, e a chamada feita pelo Atendente aparece no Painel (estado compartilhado do React).
+- **Interface:** cabeçalho com navegação e relógio, identidade visual própria e layout que se adapta a telas pequenas.
+
+### 🚧 Em desenvolvimento (parcial)
+
+- **Priorização:** hoje a ordem é simplificada (SP, depois SE, depois SG, e por chegada dentro de cada tipo). Falta a alternância completa `SP → SE|SG → SP`.
+- **Numeração:** funciona no frontend, mas a sequência reinicia ao recarregar a página (falta persistência).
+
+### ⏳ Planejadas para a segunda fase
+
+- Backend (tecnologia ainda a decidir) e integração com o frontend.
+- Banco de dados MySQL e persistência dos dados.
+- Login, perfil de gestor e permissões.
+- Início e encerramento do atendimento, "Chamar novamente", não comparecimento e máquina de estados completa.
+- Áudio das chamadas.
+- Controle de concorrência entre atendentes.
+- Expediente (7h às 17h) e descarte de senhas ao fim do dia.
+- Relatórios diário e mensal, auditoria e acompanhamento de desempenho.
+- Comportamento do sistema em caso de falhas.
 
 ## Visão geral da arquitetura
 
+**Primeira fase (atual):** só frontend.
+
 ```
-Totem / Painel / Terminal do atendente  (React, em frontend/)
-                  │  API REST (JSON)
-                  ▼
-           Backend (em backend/)
-                  │
-                  ▼
-             MySQL 8.0
+frontend/ (React)
+  App  ── guarda a fila de espera e as chamadas (estado compartilhado)
+   ├── Totem      emite senhas        → adiciona na fila
+   ├── Atendente  chama a próxima     → tira da fila e registra a chamada
+   └── Painel     mostra as chamadas
+```
+
+**Segunda fase (planejada):** frontend, backend e banco de dados, com a tecnologia do backend ainda a definir.
+
+```
+React ── API REST (JSON) ── Backend ── MySQL 8.0
 ```
 
 ## Tecnologias
 
-| Camada | Tecnologia |
-|--------|-----------|
-| Frontend | React 19 |
-| Backend | a definir (veja abaixo) |
-| Banco de dados | MySQL 8.0 |
-| Versionamento | Git e GitHub |
+| Camada | Tecnologia | Situação |
+|--------|-----------|----------|
+| Frontend | React 19 com Vite | em uso |
+| Backend | a definir | segunda fase |
+| Banco de dados | MySQL 8.0 | segunda fase |
+| Versionamento | Git e GitHub | em uso |
 
 ### Backend: decisão pendente
 
-O grupo deve escolher uma das opções aceitas pelo laboratório: Node.js 22 LTS com Express, Java 21 com Spring Boot ou Python 3.14 com Flask/FastAPI. Depois da escolha, registrar aqui:
+O backend fica para a segunda fase. O grupo deve escolher uma das opções aceitas pelo laboratório: Node.js 22 LTS com Express, Java 21 com Spring Boot ou Python 3.14 com Flask/FastAPI. Depois da escolha, registrar aqui:
 
 - tecnologia escolhida;
 - justificativa técnica;
@@ -68,7 +94,7 @@ O grupo deve escolher uma das opções aceitas pelo laboratório: Node.js 22 LTS
 
 ```
 nassauTickets/
-├── backend/          # API e regras de negócio
+├── backend/          # reservado para a segunda fase (hoje só um README)
 ├── docs/
 │   ├── branding/     # identidade visual
 │   ├── mer/          # modelo entidade-relacionamento
@@ -76,51 +102,53 @@ nassauTickets/
 │   ├── models/uml/   # diagramas UML
 │   └── requirements/ # requisitos e regras de negócio
 ├── frontend/         # aplicação React
+│   └── src/
+│       ├── components/   # Cabecalho e SenhaTag
+│       ├── data/         # tipos de senha
+│       ├── pages/        # Totem, Painel e Atendente
+│       └── utils/        # criação de senha e escolha da próxima
 ├── .gitignore
 ├── LICENSE
 └── README.md
 ```
 
-Os arquivos `.gitkeep` existem apenas para o Git versionar pastas vazias. Quando uma pasta receber seu primeiro arquivo, o `.gitkeep` dela deve ser removido.
+Todas as pastas já têm arquivos, então não há `.gitkeep`.
 
 ## Como executar
 
-**Pré-requisitos:** Git, Node.js 22 LTS e MySQL 8.0.
+**Pré-requisitos:** Git e Node.js 22 LTS.
 
 ```bash
 git clone https://github.com/Nunes-source/nassauTickets.git
-cd nassauTickets
-git checkout dev
-```
-
-**Frontend** (disponível a partir da criação do projeto React em `frontend/`):
-
-```bash
-cd frontend
+cd nassauTickets/frontend
 npm install
 npm run dev
 ```
 
-**Backend:** as instruções serão adicionadas depois que a tecnologia for definida.
+Abra o endereço mostrado no terminal (normalmente `http://localhost:5173`).
 
-**Configuração:** dados de acesso ao banco e demais segredos ficam em um arquivo `.env`, que não é versionado. Ao criar o backend, o grupo deve adicionar um `.env.example` com os nomes das variáveis, sem valores reais.
+**Como usar:** na tela **Totem**, escolha SP, SG ou SE para emitir senhas. Em **Atendente**, escolha o guichê e clique em "Chamar próxima". Em **Painel**, veja as chamadas. As três telas ficam na mesma página do navegador (abas no cabeçalho); se você recarregar, os dados são zerados.
+
+Não há backend nem configuração extra nesta fase.
 
 ## Documentação
 
-Os artefatos ficam em `docs/`. A documentação deve contemplar segurança, disponibilidade, auditoria, desempenho, concorrência, LGPD e acessibilidade.
+Os artefatos ficam em `docs/`. Eles descrevem o sistema completo; o que a primeira fase cobre está marcado em `docs/requirements/requisitos.md`.
 
 | Pasta | Conteúdo | Situação |
 |-------|----------|----------|
-| `docs/requirements/` | requisitos funcionais e não funcionais, regras de negócio, casos de uso | pendente |
-| `docs/models/uml/` | diagramas UML | pendente |
-| `docs/mer/` | modelo entidade-relacionamento | pendente |
-| `docs/mockups/` | protótipos das telas | pendente |
-| `docs/branding/` | identidade visual | pendente |
+| [`docs/requirements/`](docs/requirements/requisitos.md) | requisitos funcionais e não funcionais, regras de negócio, casos de uso, estratégia de falhas | ✅ escrito, com o escopo da primeira fase marcado |
+| [`docs/models/uml/`](docs/models/uml) | casos de uso, máquina de estados e sequência da chamada concorrente | ✅ escrito (a máquina de estados e a sequência valem para a segunda fase) |
+| [`docs/mer/`](docs/mer/mer.md) | modelo entidade-relacionamento e `schema.sql` | 🚧 preparado para a segunda fase, ainda não usado pelo sistema |
+| [`docs/mockups/`](docs/mockups/telas.md) | protótipos do Totem, do Painel e do Atendente | ✅ escrito |
+| [`docs/branding/`](docs/branding/identidade-visual.md) | cores, contraste e tipografia | ✅ escrito |
 
 ## Branches e commits
 
 - `main`: versão estável; recebe apenas merges vindos da `dev`.
 - `dev`: branch de desenvolvimento; todo código é enviado primeiro para ela.
+
+A primeira fase foi desenvolvida na `dev` e integrada à `main` por merge, sem reescrever o histórico anterior.
 
 Commits pequenos e objetivos, com prefixo: `feat:`, `fix:`, `docs:` e `chore:`.
 
