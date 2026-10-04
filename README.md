@@ -168,7 +168,7 @@ docs: adiciona requisitos do sistema
 | Gabriel Luann | 01654299 | Testador |
 | Jose Diego | 01827097 | Documentador |
 | Heitor Correia | 01841124 | Desenvolvedor |
-| Cauan Andrade | 01821096 | Testador |
+| Cauã Andrade | 01821096 | Testador |
 
 ## Licença
 
