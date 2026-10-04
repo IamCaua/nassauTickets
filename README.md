@@ -14,7 +14,7 @@ Esta é a **primeira fase** do projeto: um protótipo só de frontend, com 3 tel
 
 ## Regras de atendimento (sistema completo)
 
-Estas regras vêm da especificação do laboratório. A primeira fase implementa só parte delas (veja Funcionalidades).
+Estas regras vêm da especificação do laboratório, A primeira fase implementa só parte delas (veja Funcionalidades).
 
 | Item | Regra |
 |------|-------|
