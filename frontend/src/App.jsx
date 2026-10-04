@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import Cabecalho from './components/Cabecalho.jsx';
 import Totem from './pages/Totem.jsx';
+import Painel from './pages/Painel.jsx';
 import { criarSenha } from './utils/senhas.js';
 
 const TELAS_VALIDAS = ['totem', 'painel', 'atendente'];
@@ -18,6 +19,7 @@ export default function App() {
   const [fila, setFila] = useState([]); // senhas aguardando atendimento
   const [emitidas, setEmitidas] = useState({ SP: 0, SE: 0, SG: 0 }); // quantas já foram emitidas de cada tipo
   const [ultimaEmitida, setUltimaEmitida] = useState(null);
+  const [chamadas, setChamadas] = useState([]); // senhas já chamadas, a mais recente primeiro
 
   useEffect(() => {
     const aoMudar = () => setTela(telaDoEndereco());
@@ -37,7 +39,8 @@ export default function App() {
       <Cabecalho telaAtual={tela} />
       <main>
         {tela === 'totem' && <Totem ultimaEmitida={ultimaEmitida} totalNaFila={fila.length} onEmitir={emitirSenha} />}
-        {tela !== 'totem' && (
+        {tela === 'painel' && <Painel chamadas={chamadas} />}
+        {tela === 'atendente' && (
           <section className="cartao">
             <h1>{tela}</h1>
             <p>Tela em construção.</p>

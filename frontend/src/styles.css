@@ -102,3 +102,32 @@ main { flex: 1; width: 100%; max-width: 960px; margin: 0 auto; padding: 1.5rem 1
   .totem-opcoes { grid-template-columns: 1fr; }
   .opcao { padding: 1.25rem 1rem; }
 }
+
+/* Painel de chamadas */
+.titulo-secao { margin: 1.75rem 0 .75rem; font-size: 1.15rem; color: var(--azul-escuro); }
+.painel-atual { text-align: center; border-left-width: 10px; padding: 2rem 1rem; animation: aparecer .5s ease; }
+.painel-rotulo { margin: 0; text-transform: uppercase; letter-spacing: .12em; font-weight: 700; color: var(--texto-suave); }
+.painel-senha {
+  margin: .3rem 0; font-size: clamp(2.4rem, 11vw, 4.6rem); font-weight: 800; color: var(--azul-escuro);
+  letter-spacing: .03em; font-variant-numeric: tabular-nums;
+}
+.painel-guiche { margin: 0; font-size: 1.6rem; display: flex; justify-content: center; align-items: center; gap: .6rem; }
+.painel-vazio { text-align: center; color: var(--texto-suave); padding: 2.5rem 1rem; }
+.painel-vazio p { margin: .25rem 0; font-size: 1.15rem; }
+
+.historico { list-style: none; margin: 0; padding: 0; display: grid; gap: .5rem; }
+.historico-item {
+  display: grid; grid-template-columns: auto 1fr auto auto; align-items: center; gap: .9rem;
+  background: #fff; border: 1px solid var(--borda); border-radius: 10px; padding: .65rem 1rem;
+}
+.historico-senha { font-weight: 700; font-variant-numeric: tabular-nums; }
+.historico-guiche { font-weight: 600; }
+.historico-hora { color: var(--texto-suave); font-variant-numeric: tabular-nums; }
+
+@keyframes aparecer { from { transform: scale(.97); opacity: .4; } to { transform: scale(1); opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .painel-atual { animation: none; } .opcao { transition: none; } }
+
+@media (max-width: 640px) {
+  .historico-item { grid-template-columns: auto 1fr auto; }
+  .historico-hora { display: none; }
+}
